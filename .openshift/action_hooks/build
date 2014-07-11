@@ -5,6 +5,7 @@ version=${GOVERSION:-1.1.2}
 srcfile=${GOFILE:-go$version.$(uname|tr A-Z a-z)-amd64.tar.gz}
 url=${GOURL:-http://go.googlecode.com/files/$srcfile}
 dist=${GODIST:-$OPENSHIFT_DIY_DIR/cache/go-$version}
+selfname=`basename $OPENSHIFT_DIY_DIR`
 
 if [ -d $dist/go ]; then
 	echo "Use Go $version."
@@ -30,15 +31,22 @@ beego=${BEEGO:-github.com/astaxie/beego}
 go get $beego
 
 echo "Setting Beego web framework.."
-appconf=${APPCONF:-$GOPATH/src/beego/conf/app.conf}
+appconf=${APPCONF:-$GOPATH/src/$selfname/conf/app.conf}
 if [ ! -f $appconf ]; then
-	echo -e "appname=beego" > $appconf	
+	echo -e "appname=$selfname" > $appconf
 	echo -e "httpaddr=$OPENSHIFT_DIY_IP" >> $appconf
 	echo -e "httpport=$OPENSHIFT_DIY_PORT" >> $appconf
 fi
 
 echo "Build $OPENSHFIT_APP_NAME..."
-cd $GOPATH/src/beego
+
+if [ ! -d $GOPATH/src/$selfname ]
+then
+    mv $GOPATH/src/beego $GOPATH/src/$selfname
+    sed -i -e "s:beego/controllers:$selfname/controllers:g" INFILE.txt
+fi
+
+cd $GOPATH/src/$selfname
 go build main.go
 
 echo $GOROOT > $HOME/.env/user_vars/GOROOT
