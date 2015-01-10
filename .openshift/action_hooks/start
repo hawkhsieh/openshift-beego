@@ -9,7 +9,7 @@ logf="$OPENSHIFT_DIY_DIR/logs/etcd.log"
 mkdir "$OPENSHIFT_DIY_DIR/logs"
 touch $logf
 logf=`(echo $logf | sed 's,//,/,g')`
-pushd "$GOPATH/src/etcd" > /dev/null
+pushd "$GOPATH/src/github.com/coreos/etcd" > /dev/null
 {
 
 	if [ -f "./etcd" ]; then
