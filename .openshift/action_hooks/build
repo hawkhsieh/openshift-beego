@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eo pipefail
 
-version=${GOVERSION:-1.1.2}
+version=${GOVERSION:-1.4}
 srcfile=${GOFILE:-go$version.$(uname|tr A-Z a-z)-amd64.tar.gz}
 url=${GOURL:-http://go.googlecode.com/files/$srcfile}
 dist=${GODIST:-$OPENSHIFT_DIY_DIR/cache/go-$version}
@@ -26,20 +26,12 @@ export PATH=$GOROOT/bin:$PATH
 
 echo "Get Go 3rd packages:"
 echo "Beego web framework..."
-beego=${BEEGO:-github.com/astaxie/beego}
-go get $beego
-
-echo "Setting Beego web framework.."
-appconf=${APPCONF:-$GOPATH/src/beego/conf/app.conf}
-if [ ! -f $appconf ]; then
-	echo -e "appname=beego" > $appconf
-	echo -e "httpaddr=$OPENSHIFT_DIY_IP" >> $appconf
-	echo -e "httpport=$OPENSHIFT_DIY_PORT" >> $appconf
-fi
+etcd=${ETCD:-github.com/coreos/etcd}
+go get $etcd
 
 echo "Build $OPENSHFIT_APP_NAME..."
-cd $GOPATH/src/beego
-go build main.go
+cd $GOPATH/src/github.com/coreos/etcd
+go build
 
 echo $GOROOT > $HOME/.env/user_vars/GOROOT
 echo $GOPATH > $HOME/.env/user_vars/GOPATH

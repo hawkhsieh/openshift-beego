@@ -5,20 +5,20 @@
 
 FMT="%a %b %d % %H:%M:%S GMT%z (%Z)"
 
-logf="$OPENSHIFT_DIY_DIR/logs/beego.log"
+logf="$OPENSHIFT_DIY_DIR/logs/etcd.log"
 mkdir "$OPENSHIFT_DIY_DIR/logs"
 touch $logf
 logf=`(echo $logf | sed 's,//,/,g')`
-pushd "$GOPATH/src/beego" > /dev/null
+pushd "$GOPATH/src/etcc" > /dev/null
 {
 
 	if [ -f "./main" ]; then
 		echo "`date +"$FMT"`: Starting application '$OPENSHIFT_APP_NAME'..."
-		nohup "./main" >> $logf 2>&1 &
+		nohup "./etcd --client-listen-urls=$OPENSHIFT_DIY_IP:$OPENSHIFT_DIY_PORT" >> $logf 2>&1 &
 		ret=$?
 		npid=$!
 		if [ $ret -eq 0 ]; then
-			echo "$npid" > "$OPENSHIFT_DIY_DIR/beego.pid"
+			echo "$npid" > "$OPENSHIFT_DIY_DIR/etcd.pid"
         else
 			echo "Application '$OPENSHIFT_APP_NAME' failed to start - $ret" 1>&2
 			exit $ret
