@@ -24,8 +24,7 @@ export GOROOT=$dist/go
 export GOPATH=$OPENSHIFT_REPO_DIR
 export PATH=$GOROOT/bin:$PATH
 
-echo "Get Go 3rd packages:"
-echo "Beego web framework..."
+echo "Clone etcd..."
 etcd=${ETCD:-github.com/coreos/etcd}
 go get $etcd
 
