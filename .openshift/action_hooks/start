@@ -12,9 +12,9 @@ logf=`(echo $logf | sed 's,//,/,g')`
 pushd "$GOPATH/src/etcc" > /dev/null
 {
 
-	if [ -f "./main" ]; then
+	if [ -f "./etcd" ]; then
 		echo "`date +"$FMT"`: Starting application '$OPENSHIFT_APP_NAME'..."
-		nohup "./etcd --client-listen-urls=$OPENSHIFT_DIY_IP:$OPENSHIFT_DIY_PORT" >> $logf 2>&1 &
+		nohup "./etcd --listen-client-urls=\"http://$OPENSHIFT_DIY_IP:$OPENSHIFT_DIY_PORT\" --listen-peer-urls=\"http://$OPENSHIFT_DIY_IP:$((OPENSHIFT_DIY_PORT+1))\"" >> $logf 2>&1 &
 		ret=$?
 		npid=$!
 		if [ $ret -eq 0 ]; then
