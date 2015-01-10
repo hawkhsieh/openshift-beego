@@ -15,7 +15,7 @@ pushd "$GOPATH/src/github.com/coreos/etcd" > /dev/null
 	echo `ls -la`
 	if [ -f "./etcd" ]; then
 		echo "`date +"$FMT"`: Starting application '$OPENSHIFT_APP_NAME'..."
-		nohup ./etcd --listen-client-urls=\"http://$OPENSHIFT_DIY_IP:$OPENSHIFT_DIY_PORT\" --listen-peer-urls=\"http://$OPENSHIFT_DIY_IP:$((OPENSHIFT_DIY_PORT+1))\" >> $logf 2>&1 &
+		nohup bash -c "./etcd --listen-client-urls=\"http://$OPENSHIFT_DIY_IP:$OPENSHIFT_DIY_PORT\" --listen-peer-urls=\"http://$OPENSHIFT_DIY_IP:$((OPENSHIFT_DIY_PORT+1))\"" >> $logf 2>&1 &
 		ret=$?
 		npid=$!
 		if [ $ret -eq 0 ]; then
